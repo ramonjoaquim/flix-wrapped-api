@@ -1,4 +1,4 @@
-package com.ramonlimas.application;
+package com.ramonlimas;
 
 import io.micronaut.runtime.Micronaut;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
