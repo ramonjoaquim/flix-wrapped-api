@@ -1,21 +1,49 @@
-## Micronaut 4.8.2 Documentation
+# 🎬 Flix Wrapped API
 
-- [User Guide](https://docs.micronaut.io/4.8.2/guide/index.html)
-- [API Reference](https://docs.micronaut.io/4.8.2/api/index.html)
-- [Configuration Reference](https://docs.micronaut.io/4.8.2/guide/configurationreference.html)
-- [Micronaut Guides](https://guides.micronaut.io/index.html)
----
+API desenvolvida em [Micronaut](https://micronaut.io/) para processar e gerar insights personalizados com base no histórico de filmes e séries assistidos. Inspirado no Spotify Wrapped, mas para conteúdo audiovisual.
 
-- [Shadow Gradle Plugin](https://gradleup.com/shadow/)
-- [Micronaut Gradle Plugin documentation](https://micronaut-projects.github.io/micronaut-gradle-plugin/latest/)
-- [GraalVM Gradle Plugin documentation](https://graalvm.github.io/native-build-tools/latest/gradle-plugin.html)
-## Feature micronaut-aot documentation
+## 🚀 Funcionalidades
 
-- [Micronaut AOT documentation](https://micronaut-projects.github.io/micronaut-aot/latest/guide/)
+- Upload de histórico via CSV exportado da Netflix
+- Armazenamento temporário dos dados (auto-expiração após 7 dias)
+- Processamento e classificação de filmes/séries
+- Geração de insights: séries mais assistidas, consumo por ano, últimos assistidos e mais
+- Integração com OMDb para metadados dos títulos
+- Autenticação via Google OAuth
 
+## 🧪 Tecnologias
 
-## Feature serialization-jackson documentation
+- Micronaut
+- MongoDB
+- Java 21
+- OMDb API
+- Google OAuth
+- Caffeine Cache
+- Swagger (RapiDoc)
 
-- [Micronaut Serialization Jackson Core documentation](https://micronaut-projects.github.io/micronaut-serialization/latest/guide/)
+## 🛠️ Executando localmente
 
+### Pré-requisitos
 
+- Java 21
+- MongoDB Atlas ou local
+- OMDb API Key
+- Google OAuth Client ID e Secret
+
+### Configuração
+
+Crie um arquivo `application-local.yml` (não versionado) com:
+
+```yaml
+mongodb:
+  uri: YOUR_MONGODB_URI
+
+omdb:
+  apikey: YOUR_OMDB_API_KEY
+
+auth:
+  clientId: YOUR_GOOGLE_CLIENT_ID
+  secretKey: YOUR_GOOGLE_SECRET_KEY
+
+frontend:
+  url: http://localhost:5173
