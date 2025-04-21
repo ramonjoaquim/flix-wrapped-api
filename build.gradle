@@ -1,0 +1,109 @@
+plugins {
+    id("io.micronaut.application") version "4.5.3"
+    id("com.gradleup.shadow") version "8.3.6"
+    id("io.micronaut.aot") version "4.5.3"
+    id("io.micronaut.openapi") version "4.5.2"
+}
+
+version = "0.1"
+group = "com.ramonlimas"
+
+repositories {
+    mavenCentral()
+    // repositório Micronaut Platform (opcional, mas útil)
+    maven { url "https://repo.micronaut.io/repository/maven-public/" }
+}
+
+dependencies {
+    // Micronaut Core
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+
+    implementation("io.reactivex.rxjava2:rxjava:2.2.21")
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5' // Versão mais recente
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5' // Versão mais recente
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5' // Versão mais recente
+
+    // Google API Client para validação de tokens
+    implementation("com.google.api-client:google-api-client:2.2.0")
+    implementation("com.google.http-client:google-http-client-jackson2:1.41.5")
+
+    // Micronaut Data processor
+    annotationProcessor("io.micronaut.data:micronaut-data-processor")
+    annotationProcessor("io.micronaut.data:micronaut-data-document-processor")
+
+    // YAML
+    runtimeOnly("org.yaml:snakeyaml")
+
+    // MongoDB síncrono + Micronaut Data
+    implementation("io.micronaut.mongodb:micronaut-mongo-sync")      // driver sync + integração
+    implementation("io.micronaut.data:micronaut-data-mongodb")       // Micronaut Data para MongoDB
+    // Caso precise, inclua explicitamente o driver MongoDB sync (transitivo geralmente já traz):
+    implementation("org.mongodb:mongodb-driver-sync:4.8.2")
+
+    // BSON serialization (mapeia POJOs <-> BSON) :contentReference[oaicite:0]{index=0}
+    implementation("io.micronaut.serde:micronaut-serde-bson:2.14.0")
+
+    // CSV Parsing
+    implementation("org.apache.commons:commons-csv:1.10.0")
+
+    // Logging
+    runtimeOnly("ch.qos.logback:logback-classic")
+
+    // Lombok
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+
+    // Cache
+    implementation("io.micronaut.cache:micronaut-cache-caffeine")
+
+    // Documentação
+    implementation("io.micronaut.openapi:micronaut-openapi:latest.release")
+    implementation("io.swagger.core.v3:swagger-annotations:latest.release")
+
+    // Testes
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation("io.micronaut.test:micronaut-test-junit5")
+    testImplementation("io.micronaut:micronaut-http-client")
+}
+
+application {
+    mainClass.set("com.ramonlimas.Application")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental.set(true)
+        annotations.add("com.ramonlimas.*")
+    }
+    aot {
+        optimizeServiceLoading.set(false)
+        convertYamlToJava.set(false)
+        precomputeOperations.set(true)
+        cacheEnvironment.set(true)
+        optimizeClassLoading.set(true)
+        deduceEnvironment.set(true)
+        optimizeNetty.set(true)
+        replaceLogbackXml.set(true)
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:deprecation"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.fork = true
+    options.forkOptions.jvmArgs.add('-Dmicronaut.openapi.views.spec=rapidoc.enabled=true,swagger-ui.enabled=false,swagger-ui.theme=flattop')
+}

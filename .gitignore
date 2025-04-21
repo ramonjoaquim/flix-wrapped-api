@@ -1,0 +1,26 @@
+# Build
+/build/
+target/
+out/
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.*
+
+# Secrets
+application-prod.yml
+application-secrets.yml
+/src/main/resources/application.dev.yml
+/.gradle/
