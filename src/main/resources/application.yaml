@@ -5,21 +5,6 @@ micronaut:
     port: 8080
   cors:
     enabled: true
-    configurations:
-      default:
-        allowed-origins:
-          - "https://flix-wrapped-ui.vercel.app"
-        allowed-methods:
-          - GET
-          - POST
-          - PUT
-          - DELETE
-          - OPTIONS
-        allowed-headers:
-          - Content-Type
-          - Authorization
-          - Accept
-        allow-credentials: true
   router:
     static-resources:
       swagger:
