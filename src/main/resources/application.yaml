@@ -16,7 +16,9 @@ micronaut:
           - DELETE
           - OPTIONS
         allowed-headers:
-          - "*"
+          - Content-Type
+          - Authorization
+          - Accept
         allow-credentials: true
   router:
     static-resources:
