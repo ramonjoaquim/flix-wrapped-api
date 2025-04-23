@@ -10,7 +10,7 @@ import com.ramonlimas.domain.dto.HistoryProcessedDTO;
 import com.ramonlimas.domain.dto.InsightResultDTO;
 import com.ramonlimas.domain.enums.InsightType;
 import com.ramonlimas.domain.model.DataLake;
-import com.ramonlimas.processor.OmdbProcessor;
+import com.ramonlimas.processor.TmdbProcessor;
 import jakarta.inject.Singleton;
 import org.bson.Document;
 
@@ -20,11 +20,11 @@ import java.util.*;
 public class MostWatchedSeriesInsight implements Insight {
 
     private final MongoCollection<Document> collection;
-    private final OmdbProcessor omdbProcessor;
+    private final TmdbProcessor tmdbProcessor;
 
-    public MostWatchedSeriesInsight(MongoCollection<Document> historyProcessedRawCollection, OmdbProcessor omdbProcessor) {
+    public MostWatchedSeriesInsight(MongoCollection<Document> historyProcessedRawCollection, TmdbProcessor tmdbProcessor) {
         this.collection = historyProcessedRawCollection;
-        this.omdbProcessor = omdbProcessor;
+        this.tmdbProcessor = tmdbProcessor;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class MostWatchedSeriesInsight implements Insight {
             String title = result.getString("_id");
             int episodesCount = result.getInteger("episodesCount");
 
-            Optional<DataLake> dataLake = omdbProcessor.fetchAndSave(title, "series");
+            Optional<DataLake> dataLake = tmdbProcessor.fetchAndSave(title, "series");
             String urlPoster = dataLake.map(DataLake::getUrlPoster).orElse(null);
 
             topSeries.add(new InsightResultDTO.SeriesInfo(title, episodesCount, urlPoster));

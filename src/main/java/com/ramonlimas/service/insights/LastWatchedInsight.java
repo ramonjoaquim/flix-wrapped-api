@@ -9,7 +9,7 @@ import com.ramonlimas.domain.dto.ContentWatchedDTO;
 import com.ramonlimas.domain.dto.InsightResultDTO;
 import com.ramonlimas.domain.enums.InsightType;
 import com.ramonlimas.domain.model.DataLake;
-import com.ramonlimas.processor.OmdbProcessor;
+import com.ramonlimas.processor.TmdbProcessor;
 import jakarta.inject.Singleton;
 import org.bson.Document;
 
@@ -19,11 +19,11 @@ import java.util.*;
 public class LastWatchedInsight implements Insight {
 
     private final MongoCollection<Document> historyProcessedRawCollection;
-    private final OmdbProcessor omdbProcessor;
+    private final TmdbProcessor tmdbProcessor;
 
-    public LastWatchedInsight(MongoCollection<Document> historyProcessedRawCollection, OmdbProcessor omdbProcessor) {
+    public LastWatchedInsight(MongoCollection<Document> historyProcessedRawCollection, TmdbProcessor tmdbProcessor) {
         this.historyProcessedRawCollection = historyProcessedRawCollection;
-        this.omdbProcessor = omdbProcessor;
+        this.tmdbProcessor = tmdbProcessor;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class LastWatchedInsight implements Insight {
             Date dateWatch = data.getDate("dateWatch");
 
             // Cria o ContentWatchedDTO para cada conteúdo assistido
-            Optional<DataLake> dataLake = omdbProcessor.fetchAndSave(title, type);
+            Optional<DataLake> dataLake = tmdbProcessor.fetchAndSave(title, type);
             String urlPoster = dataLake.map(DataLake::getUrlPoster).orElse(null);
             contentDetails.add(new ContentWatchedDTO(title, type, dateWatch, urlPoster));
         }

@@ -16,5 +16,5 @@ public class DataLake {
     private String title;
     private String urlPoster;
     private String releaseYear;
-
+    private String genre;
 }
